@@ -118,7 +118,7 @@ if uploaded_file is not None:
         st.markdown("---")
         st.header(f' Notas de {i} - Matemática ')
         with st.container(border=True, height=1000):
-            col1, col2 = st.columns([1, 2], vertical_alignment="center")
+            col1, col2 = st.columns([1, 3], vertical_alignment="center")
             with col1:
                 st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=800 )
 
