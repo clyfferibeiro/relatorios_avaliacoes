@@ -35,19 +35,5 @@ div.st-emotion-cache-12w0qpk{
     display: none;
 }
 
-st.markdown(
-    """
-    <style type="text/css" media="print">
-    div.page-break
-    {
-        page-break-after: always;
-        page-break-inside: avoid;
-    }
-    </style>
-    <div class="page-break">
-        <!-- Content goes here -->
-    </div>
-""",
-    unsafe_allow_html=True,
-)
+
 
