@@ -36,6 +36,9 @@ if uploaded_file is not None:
     #conteudos = pd.read_csv('matematica_9_ano_conteudos.csv')
 
 
+    grades_valor = notas[notas["Alunos"]=="Valor"]
+    grades_valor
+    notas = notas.drop(0)
     #notas
     #conteudos
     columns = notas.columns.values.tolist()
@@ -53,13 +56,17 @@ if uploaded_file is not None:
     lista = []
     for i in alunos:
         grades = notas[notas["Alunos"]==i]
-        valor = 1.0 #notas[notas["Alunos"]=="Valor"]
+        #grades
+        
+        #valor = 1.0 #notas[notas["Alunos"]=="Valor"]
         #grades = grades.str.replace(',','.')
         #yy = (dados[disciplina].str.replace(',','.'))
         #grades
         for j in columns[1:len(columns)]:
             #grades = grades[j].str.replace(',','.')
-            #grades
+            valor = grades_valor[j][0]
+            #print("Valor")
+            #print(valor)
             media_questao = notas_questoes[j]
             #media_questao
             #media_questao = pd.to_numeric(media_questao)
@@ -67,7 +74,7 @@ if uploaded_file is not None:
             media_questao1 = media_questao.mean()
             #media_questao1submitted = st.form_submit_button("Adicionar")
             a = float(grades[j].values.tolist()[0])
-            b = 1.0 #float(valor[j].values.tolist()[0].replace(',','.'))
+            b = valor #float(valor[j].values.tolist()[0].replace(',','.'))
             nota_perc = round(a/b*100)
             # if nota_perc == 0.0:
             #      nota_perc = 0.1
@@ -79,6 +86,11 @@ if uploaded_file is not None:
     #df_media   
 
     for i in alunos:
+        grades = notas[notas["Alunos"]==i]
+        grades_wa = grades.drop('Alunos', axis=1)
+        #grades_wa
+        nota_total = grades_wa.sum(axis=1).values
+        #nota_total = nota_total1.iat[1, 0]
         df_plot = df_media[df_media["Aluno"]==i]
         #df_plot
         colors = np.ones(len(df_plot["Nota"]))
@@ -112,13 +124,15 @@ if uploaded_file is not None:
 
         
 
-        df_plot = df_plot.style.applymap(color_survived, subset=['Diferença'])
+        # df_plot = df_plot.style.applymap(color_survived, subset=['Diferença'])
+        df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
         #st.dataframe(df.style.applymap(color_survived, subset=['Survived']))
+        print(type(nota_total))
 
         st.markdown("---")
-        st.header(f' Notas de {i} - Matemática ')
+        st.header(f' Notas de {i} - Matemática. Total = {nota_total} pontos')
         with st.container(border=True, height=1000):
-            col1, col2 = st.columns([1, 3], vertical_alignment="center")
+            col1, col2 = st.columns([1, 2], vertical_alignment="center")
             with col1:
                 st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=800 )
 

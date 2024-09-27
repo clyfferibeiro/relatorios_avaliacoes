@@ -20,39 +20,40 @@ disciplina = st.selectbox(
     ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura" ]
 )
 
-turma = st.selectbox(
-    "Selecione a Turma",
-    ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
-)
+alunos = pd.read_excel('alunos.xls')
+turma = st.selectbox("Turma", alunos['Série'].sort_values(ascending = True).unique())
+#     "Selecione a Turma",
+#     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
+# )
 
 # Create a random Pandas dataframe with existing tickets.
 if "df" not in st.session_state:
 
     # Set seed for reproducibility.
-    np.random.seed(42)
+    # np.random.seed(42)
 
     # Make up some fake issue descriptions.
     issue_descriptions = [
-        "Network connectivity issues in the office",
-        "Software application crashing on startup",
-        "Printer not responding to print commands",
-        "Email server downtime",
-        "Data backup failure",
-        "Login authentication problems",
-        "Website performance degradation",
-        "Security vulnerability identified",
-        "Hardware malfunction in the server room",
-        "Employee unable to access shared files",
-        "Database connection failure",
-        "Mobile application not syncing data",
-        "VoIP phone system issues",
-        "VPN connection problems for remote employees",
-        "System updates causing compatibility issues",
-        "File server running out of storage space",
-        "Intrusion detection system alerts",
-        "Inventory management system errors",
-        "Customer data not loading in CRM",
-        "Collaboration tool not sending notifications",
+    #     "Network connectivity issues in the office",
+    #     "Software application crashing on startup",
+    #     "Printer not responding to print commands",
+    #     "Email server downtime",
+    #     "Data backup failure",
+    #     "Login authentication problems",
+    #     "Website performance degradation",
+    #     "Security vulnerability identified",
+    #     "Hardware malfunction in the server room",
+    #     "Employee unable to access shared files",
+    #     "Database connection failure",
+    #     "Mobile application not syncing data",
+    #     "VoIP phone system issues",
+    #     "VPN connection problems for remote employees",
+    #     "System updates causing compatibility issues",
+    #     "File server running out of storage space",
+    #     "Intrusion detection system alerts",
+    #     "Inventory management system errors",
+    #     "Customer data not loading in CRM",
+    #     "Collaboration tool not sending notifications",
     ]
 
     # Generate the dataframe with 100 rows/tickets.
@@ -62,6 +63,7 @@ if "df" not in st.session_state:
         "Gabarito": np.random.choice(["Aberta", "A", "B", "C", "D", "E"], size=0),
         "Valor": 0.0,
         "Dificuldade": np.random.choice(["Fácil", "Média", "Difícil"], size=0),
+        "Série": "",
         # "Date Submitted": [
         #     datetime.date(2023, 6, 1) + datetime.timedelta(days=random.randint(0, 182))
         #     for _ in range(1)
@@ -102,6 +104,7 @@ if submitted:
                 "Gabarito": gabarito,
                 "Valor": valor,
                 "Dificuldade": priority,
+                "Série": turma,
                 # "Date Submitted": today,
             }
         ]
@@ -145,6 +148,7 @@ edited_df = st.data_editor(
             options=["Fácil", "Média", "Difícil"],
             required=True,
         ),
+        "Série": None,
     },
     # Disable editing the ID and Date Submitted columns.
     #disabled=["ID"],
