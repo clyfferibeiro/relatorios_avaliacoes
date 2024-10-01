@@ -1,19 +1,14 @@
 import pandas as pd
 import streamlit as st
 
-# if "data" not in st.session_state:
-#     st.session_state["data"] = pd.DataFrame(
-#         {
-#             "Questão": [],
-#             "Conteúdo": [],
-#             "Gabarito": [],
-#         }
-#     )
 
-# data2 = {
-#     "Questão": [],
-#     "Conteúdo": [],
-# }
+
+st.title("🎫 Gerador de Tabela de Pontuações")
+st.write(
+    """
+    Selecione abaixo o arquivo do Mapa de Conteúdo.
+    """
+)
 
 uploaded_file = st.file_uploader("Faça o upload do Arquivo Desejado", type='csv')
 i = 0
