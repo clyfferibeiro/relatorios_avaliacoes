@@ -22,6 +22,29 @@ def color_survived(val):
             color = 'blue' if val>0 else 'red'
             return f'background-color: {color}'
 
+def color_questoes(val):
+            if val <= 10:
+                  color = 'red'
+                  color_texto = 'white'
+            elif val > 10 and val <= 50:
+                  color = 'orange'
+                  color_texto = 'white'
+            elif val > 50 and val <= 70:
+                  color = 'yellow'
+                  color_texto = 'black'
+            elif val > 70 and val <= 90:
+                  color = 'blue'
+                  color_texto = 'white'
+            elif val > 90:
+                  color = 'green'
+                  color_texto = 'white'
+            return f'background-color: {color}; color: {color_texto}'
+
+def color_media(val):
+            if val == 'Média da Questão':
+                  return f'color:white; background-color:black; '
+            
+
 st.title("📊 Gerador de Relatórios")
 st.write(
     """
@@ -48,6 +71,7 @@ if uploaded_file is not None:
               
            
     grades_valor = notas[notas["Alunos"]=="Valor"]
+    
     grades_valor = grades_valor.drop('Alunos', axis=1)
     valor_total = grades_valor.sum(axis=1)
 
@@ -56,11 +80,15 @@ if uploaded_file is not None:
     columns = notas.columns.values.tolist()
     notas_questoes = notas
 
+
+    #notas_questoes
+
     alunos = notas["Alunos"]
     alunos = alunos.values.tolist()
 
 
     lista = []
+    lista_notas = []
     for i in alunos:
         grades = notas[notas["Alunos"]==i]
         for j in columns[1:len(columns)]:
@@ -72,9 +100,10 @@ if uploaded_file is not None:
             nota_perc = round(a/b*100)
             delta =  round(nota_perc - media_questao1/b*100) 
             lista.append([i, j, nota_perc, round(media_questao1/b*100), delta ])
+            lista_notas.append([nota_perc])
 
     df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Media Turma", "Diferença"])
-
+    #df_media
     for i in alunos:
         grades = notas[notas["Alunos"]==i]
         grades_wa = grades.drop('Alunos', axis=1)
@@ -106,16 +135,57 @@ if uploaded_file is not None:
                   )
         fig.update_layout(barmode='stack', yaxis={'categoryorder':'category ascending'})
 
+        #notas_questoes
+        #df_plot
+        #columns
+        #grades_wa
+        
+        
+        
+        #notas_questoes
+        
+        #notas_questoes
+
        
         df_plot["Conteúdo"] = lista_conteudos
         df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
         st.markdown("---")
-        st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1]}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
+        st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
         with st.container(border=True, height=1000):
-            col1, col2 = st.columns([1, 2], vertical_alignment="center")
+            col1, col2 = st.columns([1, 1], vertical_alignment="center")
             with col1:
                 st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=800 )
 
             with col2:
                 fig
+
+    #grades_valor
+    st.markdown("---")
+    st.header('Relatório por Item')
+    with st.container(border=True, height=1100):
+        mean_list = ['Média da Questão']
+        for m in range(len(columns)-1):
+                notas_questoes[columns[m+1]] = (notas_questoes[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
+                mean_list.append(round(notas_questoes[columns[m+1]].mean()))
+
+   
+        notas_questoes.loc[-1, :] = mean_list
+        #notas_questoes
+        notas_questoes = notas_questoes.style.map(color_questoes, subset=columns[1:len(columns)])
+        notas_questoes = notas_questoes.map(color_media, subset='Alunos')
+    
+        notas_questoes = notas_questoes.format(precision=0)
+
+
+        col3, col4 = st.columns([4, 2])#, vertical_alignment="center")
+        with col3:
+            st.dataframe(notas_questoes, hide_index=True, height=1100 )
+
+        with col4:
+            st.image("legenda.png")
+            st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=800 )
         
+        
+
+        #notas_questoes.style
+    
