@@ -16,4 +16,5 @@ with st.container():
     #st.write("Informações sobre notas dos alunos.")
     st.write("Navegue no menu do lado esquerdo para as tarefas desejadas.")
     st.markdown('---')
+    st.title('Passos:')
     
