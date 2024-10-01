@@ -98,7 +98,7 @@ if uploaded_file is not None:
                         color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
         newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
 
-        fig = px.line(df_plot, y="Nota", x="Questão") 
+        #fig = px.line(df_plot, y="Nota", x="Questão") 
         #                     text_auto = True, width=800, height=800,
         #                     labels={
         #                                 "media": "Média Percentual (%)",
