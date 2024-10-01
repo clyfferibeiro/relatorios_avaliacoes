@@ -106,7 +106,7 @@ if uploaded_file is not None:
                                         "colors": ''
                         },
                         color="colors",
-                        color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
+                        color_discrete_map={ '1.0': 'blue', '0.0': 'red'})#.update_xaxes(categoryorder="total ascending")
         newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
         
         fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
