@@ -17,4 +17,5 @@ with st.container():
     st.write("Navegue no menu do lado esquerdo para as tarefas desejadas.")
     st.markdown('---')
     st.title('Passos:')
+    st.write('**1.** Crie o Mapa de Conteúdos utilizando a aba "Gerar Mapa de Conteúdos";')
     
