@@ -87,7 +87,7 @@ if uploaded_file is not None:
         df_plot = df_plot.assign(colors=colors.astype('str'))
         
 
-        fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', range_x=[-50,100], 
+        fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', range_x=[0,100], 
                             text_auto = True, width=800, height=800,
                             labels={
                                         "media": "Média Percentual (%)",
