@@ -148,7 +148,7 @@ edited_df = st.data_editor(
             options=["Fácil", "Média", "Difícil"],
             required=True,
         ),
-        "Série": None,
+        #"Série": None,
     },
     # Disable editing the ID and Date Submitted columns.
     #disabled=["ID"],
