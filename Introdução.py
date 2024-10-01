@@ -15,4 +15,5 @@ with st.container():
     st.title("App Geração Relatórios de Avaliações")
     #st.write("Informações sobre notas dos alunos.")
     st.write("Navegue no menu do lado esquerdo para as tarefas desejadas.")
+    st.markdown('---')
     
