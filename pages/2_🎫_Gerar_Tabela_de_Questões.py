@@ -17,6 +17,7 @@ import streamlit as st
 
 uploaded_file = st.file_uploader("Faça o upload do Arquivo Desejado", type='csv')
 i = 0
+l = 0
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
@@ -58,7 +59,7 @@ if uploaded_file is not None:
     for elemento in planilha_transpose.loc['Valor', :]:
         lista3.append(f'{elemento}')
 
-    print(type(lista3[0]))
+    #print(type(lista3[0]))
     #lista1
     #lista2
     #lista3
@@ -79,41 +80,40 @@ if uploaded_file is not None:
     #df
     listofzeros = [0.0] * (len(alunos)-1)
     listofzeros = listofzeros
-    #listofzeros
-    #lista
-    #for i in range(len(lista)):
-    #lista3
-    #lista
     while i < len(lista):
         for j in range(len(lista3)):
-            #list = []
-            #print(j)
-            #print(lista2[j])
-            #list = [ lista2[j] ]
             list = [ float(lista3[j]) ]
-            #list.extend(list3)
             list.extend(listofzeros)
-            #list
-        #for i in range(len(lista)):
+        
             df_teste = pd.DataFrame({lista[i]:list})
             tabela_pontos = df.join(df_teste)
-            #df = tabela_pontos
-            #df[lista[i]][1] = pd.to_numeric(df[lista[i]][1])
+            
             df = tabela_pontos
-            #tabela_pontos = df
-            #df
             i = i + 1
-            print(i)
+            #print(i)
 
-    #df2 = df.append(pd.DataFrame(lista2 + lista3,index=['0'],columns=df.columns))
-    #df2 = pd.concat([lista2 + lista3,df.loc[:]]).reset_index(drop=True)
-    #df2
     
     tabela_pontos = st.data_editor(tabela_pontos, use_container_width=True, hide_index=True)
-    #df = st.data_editor(df)
-    print(i)
+    
+    cont_questao = []
+    for j in range(len(lista)):
+        cont_questao.append(lista[j]+"Conteudo")
 
+    
+    while l < len(cont_questao):
+        for j in range(len(lista2)):
+            list1 = []
+            for k in range(len(alunos)+1):
+                list1.append(lista2[j])
+            #list1
+            df_teste = pd.DataFrame({cont_questao[l]:list1})
+            new_tabela_pontos = tabela_pontos.join(df_teste)
+            tabela_pontos = new_tabela_pontos
+            l = l + 1
 
+    #cont_questao
+    #lista2
+    #new_tabela_pontos
     csv = tabela_pontos.to_csv(index=False).encode('utf-8')
 #disciplina = "Matematica"
     st.download_button(

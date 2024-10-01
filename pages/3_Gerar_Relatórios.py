@@ -35,9 +35,25 @@ if uploaded_file is not None:
     notas = data #pd.read_csv('matematica_9_ano.csv')
     #conteudos = pd.read_csv('matematica_9_ano_conteudos.csv')
 
-
+    notas_com_conteudos = notas
+    #grades_valor = notas[notas["Alunos"]=="Valor"]
+    #grades_valor
+    columns = notas.columns.values.tolist()
+    busca = 'Conteudo'
+    lista_conteudos = []
+    for s in columns:
+         print(s)
+         if busca in s:
+              lista_conteudos.append(notas[s][0])
+              notas = notas.drop(s, axis=1)
+              
+           
     grades_valor = notas[notas["Alunos"]=="Valor"]
-    grades_valor
+    #grades_valor
+    grades_valor = grades_valor.drop('Alunos', axis=1)
+    valor_total = grades_valor.sum(axis=1)
+
+    
     notas = notas.drop(0)
     #notas
     #conteudos
@@ -89,7 +105,7 @@ if uploaded_file is not None:
         grades = notas[notas["Alunos"]==i]
         grades_wa = grades.drop('Alunos', axis=1)
         #grades_wa
-        nota_total = grades_wa.sum(axis=1).values
+        nota_total = grades_wa.sum(axis=1)
         #nota_total = nota_total1.iat[1, 0]
         df_plot = df_media[df_media["Aluno"]==i]
         #df_plot
@@ -117,20 +133,25 @@ if uploaded_file is not None:
                                       hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
                                      )
                   )
+        fig.update_layout(barmode='stack', yaxis={'categoryorder':'category ascending'})
         #fig.update(layout_showlegend=False)
             # fig_media_porcentage.add_shape( # add a horizontal "target" line
             # type="line", line_color="salmon", line_width=4, opacity=1, line_dash="dot",
             # x0=0, x1=1, xref="paper", y0=70, y1=70, yref="y")
 
+       
+        df_plot["Conteúdo"] = lista_conteudos
         
-
         # df_plot = df_plot.style.applymap(color_survived, subset=['Diferença'])
         df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
+        
         #st.dataframe(df.style.applymap(color_survived, subset=['Survived']))
-        print(type(nota_total))
+        #print((nota_total[alunos.index(i)+1]))
+        #print(type(alunos))
+        #print(alunos.index(i))
 
         st.markdown("---")
-        st.header(f' Notas de {i} - Matemática. Total = {nota_total} pontos')
+        st.header(f' Notas de {i} - Matemática. Pontuação: {nota_total[alunos.index(i)+1]}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
         with st.container(border=True, height=1000):
             col1, col2 = st.columns([1, 2], vertical_alignment="center")
             with col1:
