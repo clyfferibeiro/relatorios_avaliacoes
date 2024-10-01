@@ -17,7 +17,7 @@ st.write(
 
 disciplina = st.selectbox(
     "Selecione a Disciplina",
-    ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura" ]
+    ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ].sort_values(ascending = True)
 )
 
 alunos = pd.read_excel('alunos.xls')
