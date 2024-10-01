@@ -108,7 +108,7 @@ if uploaded_file is not None:
         df_plot["Conteúdo"] = lista_conteudos
         df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
         st.markdown("---")
-        st.header(f' Notas de {i} - Matemática. Pontuação: {nota_total[alunos.index(i)+1]}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
+        st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1]}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
         with st.container(border=True, height=1000):
             col1, col2 = st.columns([1, 2], vertical_alignment="center")
             with col1:
