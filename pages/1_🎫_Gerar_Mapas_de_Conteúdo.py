@@ -154,6 +154,8 @@ edited_df = st.data_editor(
     #disabled=["ID"],
 )
 
+st.session_state.df = edited_df
+
 st.write(f"Valor Total das Questões: `{edited_df.Valor.sum()}`")
 
 #save = st.form_submit_button("Salvar Planilha")
