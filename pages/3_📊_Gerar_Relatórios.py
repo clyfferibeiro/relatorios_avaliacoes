@@ -22,7 +22,7 @@ def color_survived(val):
             color = 'blue' if val>0 else 'red'
             return f'background-color: {color}'
 
-st.title("🎫 Gerador de Relatórios")
+st.title("📊 Gerador de Relatórios")
 st.write(
     """
     Selecione abaixo o arquivo da Tabela de Questões.
