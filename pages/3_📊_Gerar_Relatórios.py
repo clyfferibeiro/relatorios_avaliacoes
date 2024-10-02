@@ -19,8 +19,16 @@ st.markdown(
 )
 
 def color_survived(val):
-            color = 'blue' if val>0 else 'red'
-            return f'background-color: {color}'
+            if val > 0:
+                color = 'blue' 
+                color_texto = 'white'
+            elif val<0: 
+                color = 'red'
+                color_texto = 'white'
+            else:
+                  color = 'white'
+                  color_texto = 'black'
+            return f'background-color: {color}; color: {color_texto}'
 
 def color_questoes(val):
             if val <= 10:
@@ -61,7 +69,7 @@ if uploaded_file is not None:
 
 
     notas = data 
-    
+
     if 'Alunos' in notas.columns:
 
         notas_com_conteudos = notas
