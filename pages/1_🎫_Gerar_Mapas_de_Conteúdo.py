@@ -96,10 +96,14 @@ if submitted:
     else:  
         recent_ticket_number = len(st.session_state.df)
     today = datetime.datetime.now().strftime("%m-%d-%Y")
+    if recent_ticket_number < 9:
+        id = f'Q0{recent_ticket_number+1}'
+    else:
+        id = f'Q{recent_ticket_number+1}'
     df_new = pd.DataFrame(
         [
             {
-                "ID": f"Q{recent_ticket_number+1}",
+                "ID": id,
                 "Conteúdo": issue,
                 "Gabarito": gabarito,
                 "Valor": valor,

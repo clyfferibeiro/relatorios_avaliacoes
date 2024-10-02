@@ -116,7 +116,7 @@ if uploaded_file is not None:
         df_plot = df_plot.assign(colors=colors.astype('str'))
         
 
-        fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', range_x=[0,100], 
+        fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', 
                             text_auto = True, width=800, height=800,
                             labels={
                                         "media": "Média Percentual (%)",
@@ -154,7 +154,7 @@ if uploaded_file is not None:
         with st.container(border=True, height=1000):
             col1, col2 = st.columns([1, 1], vertical_alignment="center")
             with col1:
-                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=800 )
+                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=1000 )
 
             with col2:
                 fig
@@ -162,7 +162,7 @@ if uploaded_file is not None:
     #grades_valor
     st.markdown("---")
     st.header('Relatório por Item')
-    with st.container(border=True, height=1100):
+    with st.container(border=True, height=1300):
         mean_list = ['Média da Questão']
         for m in range(len(columns)-1):
                 notas_questoes[columns[m+1]] = (notas_questoes[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
@@ -179,11 +179,11 @@ if uploaded_file is not None:
 
         col3, col4 = st.columns([4, 2])#, vertical_alignment="center")
         with col3:
-            st.dataframe(notas_questoes, hide_index=True, height=1100 )
+            st.dataframe(notas_questoes, hide_index=True, height=1300 )
 
         with col4:
             st.image("legenda.png")
-            st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=800 )
+            st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=1200 )
         
         
 
