@@ -6,6 +6,12 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+
+def update():
+    for idx, change in st.session_state.changes["edited_rows"].items():
+        for label, value in change.items():
+            st.session_state.df.loc[idx, label] = value
+
 # Show app title and description.
 st.set_page_config(page_title="App Geração Relatório de Avaliações", page_icon="🎫")
 st.title("🎫 Mapa de Conteúdos")
@@ -34,26 +40,7 @@ if "df" not in st.session_state:
 
     # Make up some fake issue descriptions.
     issue_descriptions = [
-    #     "Network connectivity issues in the office",
-    #     "Software application crashing on startup",
-    #     "Printer not responding to print commands",
-    #     "Email server downtime",
-    #     "Data backup failure",
-    #     "Login authentication problems",
-    #     "Website performance degradation",
-    #     "Security vulnerability identified",
-    #     "Hardware malfunction in the server room",
-    #     "Employee unable to access shared files",
-    #     "Database connection failure",
-    #     "Mobile application not syncing data",
-    #     "VoIP phone system issues",
-    #     "VPN connection problems for remote employees",
-    #     "System updates causing compatibility issues",
-    #     "File server running out of storage space",
-    #     "Intrusion detection system alerts",
-    #     "Inventory management system errors",
-    #     "Customer data not loading in CRM",
-    #     "Collaboration tool not sending notifications",
+    
     ]
 
     # Generate the dataframe with 100 rows/tickets.
@@ -117,7 +104,7 @@ if submitted:
     # Show a little success message.
     #st.write("Ticket submitted! Here are the ticket details:")
     #st.dataframe(df_new, use_container_width=True, hide_index=True)
-    st.session_state.df = pd.concat([ st.session_state.df,df_new], axis=0)
+    st.session_state.df = pd.concat([ st.session_state.df,df_new], axis=0, ignore_index=True)
 
 # Show section to view and edit existing tickets in a table.
 st.header("Lista de Questões Adicionadas")
@@ -134,8 +121,8 @@ st.info(
 
 # Show the tickets dataframe with `st.data_editor`. This lets the user edit the table
 # cells. The edited data is returned as a new dataframe.
-edited_df = st.data_editor(
-    st.session_state.df,
+st.session_state.df = st.data_editor(
+    st.session_state.df, key="changes", on_change=update,
     #num_rows="dynamic",
     use_container_width=True,
     hide_index=True,
@@ -156,23 +143,45 @@ edited_df = st.data_editor(
     },
     # Disable editing the ID and Date Submitted columns.
     #disabled=["ID"],
+    
 )
-
-st.session_state.df = edited_df
+#st.session_state.df = 
+edited_df = st.session_state.df
 
 st.write(f"Valor Total das Questões: `{edited_df.Valor.sum()}`")
 
 #save = st.form_submit_button("Salvar Planilha")
 
-csv = edited_df.to_csv(index=False).encode('utf-8')
-#disciplina = "Matematica"
-st.download_button(
-   "Salvar Mapa de Conteúdos",
-   csv,
-   f'{disciplina}_{turma}_Mapa_Conteudos.csv',
-   "text/csv",
-   key='download-csv'
-)
+
+col3, col4 = st.columns([1, 1])#, vertical_alignment="center")
+with col3:
+    csv = edited_df.to_csv(index=False).encode('utf-8')
+    #disciplina = "Matematica"
+    st.download_button(
+    "Salvar Mapa de Conteúdos",
+    csv,
+    f'{disciplina}_{turma}_Mapa_Conteudos.csv',
+    "text/csv",
+    key='download-csv'
+    )
+
+with col4:
+    if st.button("Recomeçar Construção"):
+        del st.session_state.df
+        #st.session_state.df = pd.DataFrame()
+        st.rerun()
+
+# csv = edited_df.to_csv(index=False).encode('utf-8')
+# #disciplina = "Matematica"
+# st.download_button(
+#    "Salvar Mapa de Conteúdos",
+#    csv,
+#    f'{disciplina}_{turma}_Mapa_Conteudos.csv',
+#    "text/csv",
+#    key='download-csv'
+# )
+
+
 
 # columns = edited_df.columns.values.tolist()
 
