@@ -115,7 +115,7 @@ if uploaded_file is not None:
         st.download_button(
         "Salvar Tabela Pontuação",
         csv,
-        f'{nome_arquivo}_Tabela_Pontuação.csv',
+        f'{nome_arquivo}{turma}_Tabela_Pontuação.csv',
         "text/csv",
         key='download-csv'
         )
