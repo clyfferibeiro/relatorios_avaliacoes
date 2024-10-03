@@ -60,7 +60,7 @@ st.write(
     """
 )
 
-tamanho = st.sidebar.slider("Tamanho das páginas", 400, 1500, 800)
+tamanho = st.sidebar.slider("Altura das páginas", 400, 1500, 800)
 
 uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
 if uploaded_file is not None:
@@ -185,7 +185,10 @@ if uploaded_file is not None:
         #grades_valor
         st.markdown("---")
         st.header('Relatório por Item')
-        with st.container(border=True, height=tamanho):
+        coluna1 = st.sidebar.slider("Tamanho do Relatório por Item", 1, 10, 4)
+        coluna3 = st.sidebar.slider("Tamanho do Mapa Conteúdo", 1, 10, 2)
+        altura = st.sidebar.slider("Altura do Relatório", 400, 1500, 800)
+        with st.container(border=True, height=altura):
             mean_list = ['Média da Questão']
             for m in range(len(columns)-1):
                     notas_questoes[columns[m+1]] = (notas_questoes[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
@@ -199,14 +202,16 @@ if uploaded_file is not None:
         
             notas_questoes = notas_questoes.format(precision=0)
 
-
-            col3, col4 = st.columns([4, 2])#, vertical_alignment="center")
+            
+            col3, col4, col5 = st.columns([coluna1, 1, coluna3])#, vertical_alignment="center")
             with col3:
-                st.dataframe(notas_questoes, hide_index=True, height=tamanho )
+                st.dataframe(notas_questoes, hide_index=True, height=altura )
 
             with col4:
                 st.image("legenda.png")
-                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=tamanho)
+
+            with col5:
+                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=altura)
             
             
 
