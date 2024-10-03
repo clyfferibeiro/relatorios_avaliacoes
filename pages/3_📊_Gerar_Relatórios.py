@@ -167,7 +167,7 @@ if uploaded_file is not None:
             
             #notas_questoes
 
-        
+            #print(fig.key)
             df_plot["Conteúdo"] = lista_conteudos
             df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
             st.markdown("---")
@@ -179,6 +179,7 @@ if uploaded_file is not None:
 
                 with col2:
                     fig
+            fig = []
 
         #grades_valor
         st.markdown("---")
