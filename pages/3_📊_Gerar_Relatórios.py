@@ -116,6 +116,7 @@ if uploaded_file is not None:
 
         df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Media Turma", "Diferença"])
         #df_media
+
         for i in alunos:
             grades = notas[notas["Alunos"]==i]
             grades_wa = grades.drop('Alunos', axis=1)
@@ -127,7 +128,7 @@ if uploaded_file is not None:
             colors[index1] = 0
             df_plot = df_plot.assign(colors=colors.astype('str'))
             
-
+            
             fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', 
                                 text_auto = True, width=800, height=800,
                                 labels={
@@ -179,7 +180,7 @@ if uploaded_file is not None:
 
                 with col2:
                     fig
-            fig = []
+            
 
         #grades_valor
         st.markdown("---")
