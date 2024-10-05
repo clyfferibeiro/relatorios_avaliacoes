@@ -131,11 +131,7 @@ col6.write(f"Disciplina: `{disciplina}`")
 col7.write(f"Turma: `{turma}`")
 
 
-st.info(
-    "Você pode editar o conteúdo, o gabarito, o valor e a dificuldade das questões clicando duas vezes"
-    " na célula correspondente!",
-    icon="✍️",
-)
+
 
 # Show the tickets dataframe with `st.data_editor`. This lets the user edit the table
 # cells. The edited data is returned as a new dataframe.
@@ -167,6 +163,11 @@ st.session_state.df = st.data_editor(
 edited_df = st.session_state.df
 
 st.write(f"Valor Total das Questões: `{edited_df.Valor.sum().round(2)}`")
+st.info(
+    "Você pode editar o conteúdo, o gabarito, o valor e a dificuldade das questões clicando duas vezes"
+    " na célula correspondente!",
+    icon="✍️",
+)
 
 #save = st.form_submit_button("Salvar Planilha")
 
