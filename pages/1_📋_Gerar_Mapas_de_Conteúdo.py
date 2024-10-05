@@ -18,7 +18,7 @@ def clear_text():
     st.session_state.widget = ""
 
 # Show app title and description.
-st.set_page_config(page_title="App Geração Relatório de Avaliações", page_icon="🎫")
+st.set_page_config(page_title="App Geração Relatório de Avaliações", page_icon="📋")
 st.title("📋 Mapa de Conteúdos")
 st.info(
     """

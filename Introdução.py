@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
-st.set_page_config(layout="wide", page_title="App Geração Relatório de Avaliações")
+st.set_page_config(layout="wide", page_title="App Geração Relatório de Avaliações", page_icon='🏫')
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
