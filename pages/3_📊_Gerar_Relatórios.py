@@ -54,16 +54,28 @@ def color_media(val):
             
 
 st.title("📊 Gerador de Relatórios")
+
+st.info(
+    """
+    Aplicativo para criação dos Relatórios das Avaliações.
+    """, icon='📈'
+)
+
 st.write(
     """
-    Selecione abaixo o arquivo da Tabela de Pontuação.
+    👇 Selecione abaixo o arquivo da Tabela de Pontuação da Avaliação.
     """
 )
 
-tamanho = st.sidebar.slider("Altura das páginas", 400, 1500, 800)
 
 uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
+
 if uploaded_file is not None:
+    st.sidebar.write("Configurações Relatórios dos Alunos")
+    tamanho = st.sidebar.slider("Altura das páginas", 400, 1500, 800)
+    largura_mapa = st.sidebar.slider("Largura Tabela de Notas", 1, 5, 2)
+    largura_grafico = st.sidebar.slider("Largura Gráfico de Notas", 1, 5, 3)
+    
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
 
@@ -96,6 +108,7 @@ if uploaded_file is not None:
         #notas_questoes
 
         alunos = notas["Alunos"]
+        #alunos = st.sidebar.multiselect("Selecione Alunos", notas["Alunos"], default=notas["Alunos"])
         alunos = alunos.values.tolist()
 
 
@@ -174,7 +187,7 @@ if uploaded_file is not None:
             st.markdown("---")
             st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
             with st.container(border=True, height=tamanho):
-                col1, col2 = st.columns([1, 1], vertical_alignment="center")
+                col1, col2 = st.columns([largura_mapa, largura_grafico], vertical_alignment="center")
                 with col1:
                     st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=tamanho )
 
@@ -185,9 +198,12 @@ if uploaded_file is not None:
         #grades_valor
         st.markdown("---")
         st.header('Relatório por Item')
-        coluna1 = st.sidebar.slider("Tamanho do Relatório por Item", 1, 10, 4)
-        coluna3 = st.sidebar.slider("Tamanho do Mapa Conteúdo", 1, 10, 2)
-        altura = st.sidebar.slider("Altura do Relatório", 400, 1500, 800)
+        st.sidebar.markdown("---")
+        st.sidebar.write("Configurações Relatório por Item")
+        altura = st.sidebar.slider("Altura do Relatório por Item", 400, 1500, 800)
+        coluna1 = st.sidebar.slider("Largura do Relatório por Item", 1, 10, 4)
+        coluna3 = st.sidebar.slider("Largura do Mapa de Conteúdos", 1, 10, 2)
+        
         with st.container(border=True, height=altura):
             mean_list = ['Média da Questão']
             for m in range(len(columns)-1):
@@ -217,5 +233,5 @@ if uploaded_file is not None:
 
             #notas_questoes.style
     else:
-          st.error("DADOS INVÁLIDOS! Verifique se o arquivo é uma Tabela de Pontuação.")
+          st.error("🚨 DADOS INVÁLIDOS! Verifique se o arquivo é uma Tabela de Pontuação. 🚨")
     
