@@ -120,4 +120,4 @@ if uploaded_file is not None:
         key='download-csv'
         )
     else:
-        st.write("DADOS INVÁLIDOS!")
+        st.error("DADOS INVÁLIDOS! Verifique se o arquivo é um Mapa de Conteúdos.")

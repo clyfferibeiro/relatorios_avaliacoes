@@ -12,22 +12,35 @@ def update():
         for label, value in change.items():
             st.session_state.df.loc[idx, label] = value
 
+
+def clear_text():
+    st.session_state.my_text = st.session_state.widget
+    st.session_state.widget = ""
+
 # Show app title and description.
 st.set_page_config(page_title="App Geração Relatório de Avaliações", page_icon="🎫")
 st.title("🎫 Mapa de Conteúdos")
+st.markdown("---")
 st.write(
     """
     Aplicativo para criação de Mapa de Conteúdos das avaliações.
     """
 )
 
-disciplina = st.selectbox(
-    "Selecione a Disciplina",
-    ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ]
-)
-
 alunos = pd.read_excel('alunos.xls')
-turma = st.selectbox("Turma", alunos['Série'].sort_values(ascending = True).unique())
+
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+    disciplina = st.selectbox(
+        "Selecione a Disciplina",
+        ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ]
+    )
+
+with col2:
+    turma = st.selectbox("Turma", alunos['Série'].sort_values(ascending = True).unique())
 #     "Selecione a Turma",
 #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
 # )
@@ -66,14 +79,19 @@ if "df" not in st.session_state:
 # Show a section to add a new ticket.
 st.header("Adicionar Questão")
 
+col5, col6, col7 = st.columns(3)
+
 # We're adding tickets via an `st.form` and some input widgets. If widgets are used
 # in a form, the app will only rerun once the submit button is pressed.
 with st.form("add_ticket_form"):
-    issue = st.text_area("Conteúdo da Questão")
-    gabarito = st.selectbox("Gabarito", ["Aberta", "A", "B", "C", "D", "E"])
-    valor = st.number_input("Insira o valor da questão", value=1.0, step=0.1)
-    priority = st.selectbox("Dificuldade", ["Fácil", "Média", "Difícil"])
-    submitted = st.form_submit_button("Adicionar")
+    #issue = st.text_input("Conteúdo da Questão")
+    st.text_input("Conteúdo da Questão", key='widget')
+    issue = st.session_state.get('my_text', '')
+    col8, col9, col10 = st.columns(3)
+    gabarito = col8.selectbox("Gabarito", ["Aberta", "A", "B", "C", "D", "E"])
+    valor = col9.number_input("Insira o valor da questão", value=1.0, step=0.10)
+    priority = col10.selectbox("Dificuldade", ["Fácil", "Média", "Difícil"])
+    submitted = st.form_submit_button("Adicionar", on_click=clear_text)
 
 if submitted:
     # Make a dataframe for the new ticket and append it to the dataframe in session
@@ -106,11 +124,12 @@ if submitted:
     #st.dataframe(df_new, use_container_width=True, hide_index=True)
     st.session_state.df = pd.concat([ st.session_state.df,df_new], axis=0, ignore_index=True)
 
-# Show section to view and edit existing tickets in a table.
+
 st.header("Lista de Questões Adicionadas")
-st.write(f"Número de Questões: `{len(st.session_state.df)}`")
-st.write(f"Disciplina: `{disciplina}`")
-st.write(f"Turma: `{turma}`")
+col5, col6, col7 = st.columns(3)
+col5.write(f"Número de Questões: `{len(st.session_state.df)}`")
+col6.write(f"Disciplina: `{disciplina}`")
+col7.write(f"Turma: `{turma}`")
 
 
 st.info(
@@ -148,7 +167,7 @@ st.session_state.df = st.data_editor(
 #st.session_state.df = 
 edited_df = st.session_state.df
 
-st.write(f"Valor Total das Questões: `{edited_df.Valor.sum()}`")
+st.write(f"Valor Total das Questões: `{edited_df.Valor.sum().round(2)}`")
 
 #save = st.form_submit_button("Salvar Planilha")
 

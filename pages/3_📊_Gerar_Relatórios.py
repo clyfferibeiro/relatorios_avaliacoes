@@ -56,7 +56,7 @@ def color_media(val):
 st.title("📊 Gerador de Relatórios")
 st.write(
     """
-    Selecione abaixo o arquivo da Tabela de Questões.
+    Selecione abaixo o arquivo da Tabela de Pontuação.
     """
 )
 
@@ -217,5 +217,5 @@ if uploaded_file is not None:
 
             #notas_questoes.style
     else:
-          st.write("DADOS INVÁLIDOS!")
+          st.error("DADOS INVÁLIDOS! Verifique se o arquivo é uma Tabela de Pontuação.")
     
