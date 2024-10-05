@@ -127,7 +127,7 @@ if uploaded_file is not None:
                 lista.append([i, j, nota_perc, round(media_questao1/b*100), delta ])
                 lista_notas.append([nota_perc])
 
-        df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Media Turma", "Diferença"])
+        df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença"])
         #df_media
 
         for i in alunos:
@@ -137,7 +137,7 @@ if uploaded_file is not None:
             df_plot = df_media[df_media["Aluno"]==i]
             colors = np.ones(len(df_plot["Nota"]))
             colors = np.transpose(colors)
-            index1 = df_plot["Nota"] < df_plot["Media Turma"].values
+            index1 = df_plot["Nota"] < df_plot["Média Turma"].values
             colors[index1] = 0
             df_plot = df_plot.assign(colors=colors.astype('str'))
             
@@ -168,7 +168,9 @@ if uploaded_file is not None:
                                         hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
                                         )
                     )
-            fig.update_layout(barmode='stack', yaxis={'categoryorder':'category ascending'})
+            fig.update_layout(barmode='stack', yaxis={'categoryorder':'category descending'}, xaxis_range=[0,100])
+            fig.update_xaxes(showgrid=False)
+            fig.update_yaxes(showgrid=True)
 
             #notas_questoes
             #df_plot
@@ -227,7 +229,7 @@ if uploaded_file is not None:
                 st.image("legenda.png")
 
             with col5:
-                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Media Turma": None, "Diferença": None}, hide_index=True, height=altura)
+                st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Média Turma": None, "Diferença": None}, hide_index=True, height=altura)
             
             
 
