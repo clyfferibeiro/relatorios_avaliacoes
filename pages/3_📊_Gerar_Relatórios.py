@@ -61,17 +61,34 @@ st.info(
     """, icon='📈'
 )
 
-st.write(
-    """
-    👇 Selecione abaixo o arquivo da Tabela de Pontuação da Avaliação.
-    """
-)
-
+st.markdown("---")
 with st.sidebar:
     st.image("logo.png")
 
+css='''
+<style>
+[data-testid="stFileUploaderDropzone"] div div::before {color:black; content:"Arraste e Solte o arquivo aqui"}
+[data-testid="stFileUploaderDropzone"] div div span{display:none;}
+[data-testid="stFileUploaderDropzone"] div div::after {color:black; font-size: .8em; content:"Limite por arquivo: 200 MB"}
+[data-testid="stFileUploaderDropzone"] div div small{display:none;}
+[data-testid="stFileUploaderDropzone"] button {border: solid 2px white;font-size: 0;width: 35%;}
+[data-testid="stFileUploaderDropzone"] button::after {content:"Procurar Arquivo";display: block;position: absolute;font-size: 16px;} 
+</style>
+'''
+st.markdown(css, unsafe_allow_html=True)
 
-uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
+
+col1_1, col1_2 = st.columns([1,2])
+
+with col1_1:
+    st.write(
+        """
+        👇 Selecione abaixo o arquivo da Tabela de Pontuação da Avaliação.
+        """
+    )
+
+    uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
+    #st.markdown(css, unsafe_allow_html=True)
 
 if uploaded_file is not None:
     st.sidebar.markdown("---")

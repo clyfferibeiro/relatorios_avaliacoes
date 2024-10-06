@@ -11,17 +11,34 @@ st.info(
     """, icon='⌨️'
 )
 st.markdown("---")
-
-st.write(
-    """
-    👇 Selecione abaixo o arquivo do Mapa de Conteúdos da Avaliação.
-    """
-)
-
 with st.sidebar:
     st.image("logo.png")
 
-uploaded_file = st.file_uploader("Faça o upload do Arquivo Desejado", type='csv')
+
+
+css='''
+<style>
+[data-testid="stFileUploaderDropzone"] div div::before {color:black; content:"Arraste e Solte o arquivo aqui"}
+[data-testid="stFileUploaderDropzone"] div div span{display:none;}
+[data-testid="stFileUploaderDropzone"] div div::after {color:black; font-size: .8em; content:"Limite por arquivo: 200 MB"}
+[data-testid="stFileUploaderDropzone"] div div small{display:none;}
+[data-testid="stFileUploaderDropzone"] button {border: solid 2px white;font-size: 0;width: 35%;}
+[data-testid="stFileUploaderDropzone"] button::after {content:"Procurar Arquivo";display: block;position: absolute;font-size: 16px;} 
+</style>
+'''
+st.markdown(css, unsafe_allow_html=True)    
+
+col1, col2 = st.columns([1,2])
+
+
+with col1:
+    st.write(
+        """
+        👇 Selecione abaixo o arquivo do Mapa de Conteúdos da Avaliação.
+        """
+    )
+
+    uploaded_file = st.file_uploader("Faça o upload do Arquivo Desejado", type='csv')
 i = 0
 l = 0
 if uploaded_file is not None:
