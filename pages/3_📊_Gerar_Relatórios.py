@@ -71,8 +71,8 @@ css='''
 [data-testid="stFileUploaderDropzone"] div div span{display:none;}
 [data-testid="stFileUploaderDropzone"] div div::after {color:black; font-size: .8em; content:"Limite por arquivo: 200 MB"}
 [data-testid="stFileUploaderDropzone"] div div small{display:none;}
-[data-testid="stFileUploaderDropzone"] button {border: solid 2px white;font-size: 0;width: 35%;}
-[data-testid="stFileUploaderDropzone"] button::after {content:"Procurar Arquivo";display: block;position: absolute;font-size: 16px;} 
+[data-testid="stFileUploaderDropzone"] button {border: solid 2px white;font-size: 0;width: 38%;}
+[data-testid="stFileUploaderDropzone"] button::after {content:"Procurar Arquivo";display: block;position: absolute;font-size: 15px;} 
 </style>
 '''
 st.markdown(css, unsafe_allow_html=True)
