@@ -79,7 +79,8 @@ if uploaded_file is not None:
     tamanho = st.sidebar.slider("Altura das páginas", 400, 1500, 800)
     largura_mapa = st.sidebar.slider("Largura Tabela de Notas", 1, 5, 2)
     largura_grafico = st.sidebar.slider("Largura Gráfico de Notas", 1, 5, 3)
-    
+
+        
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
 

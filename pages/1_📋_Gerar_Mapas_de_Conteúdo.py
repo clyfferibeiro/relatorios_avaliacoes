@@ -80,12 +80,10 @@ if "df" not in st.session_state:
 
 # Show a section to add a new ticket.
 st.header("Adicionar Questão")
-
 col5, col6, col7 = st.columns(3)
-
 # We're adding tickets via an `st.form` and some input widgets. If widgets are used
 # in a form, the app will only rerun once the submit button is pressed.
-with st.form("add_ticket_form"):
+with st.form("add_ticket_form", clear_on_submit=True):
     #issue = st.text_input("Conteúdo da Questão")
     st.text_input("Conteúdo da Questão", key='widget')
     issue = st.session_state.get('my_text', '')
@@ -175,7 +173,7 @@ st.info(
 #save = st.form_submit_button("Salvar Planilha")
 
 
-col3, col4 = st.columns([1, 1])#, vertical_alignment="center")
+col3, col4 = st.columns([1, 2], gap="small")#, vertical_alignment="center")
 with col3:
     csv = edited_df.to_csv(index=False).encode('utf-8')
     #disciplina = "Matematica"
