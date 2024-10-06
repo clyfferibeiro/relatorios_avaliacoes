@@ -18,6 +18,9 @@ st.write(
     """
 )
 
+with st.sidebar:
+    st.image("logo.png")
+
 uploaded_file = st.file_uploader("Faça o upload do Arquivo Desejado", type='csv')
 i = 0
 l = 0

@@ -67,11 +67,15 @@ st.write(
     """
 )
 
+with st.sidebar:
+    st.image("logo.png")
+
 
 uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
 
 if uploaded_file is not None:
-    st.sidebar.write("Configurações Relatórios dos Alunos")
+    st.sidebar.markdown("---")
+    st.sidebar.write("**Configurações Relatórios dos Alunos**")
     tamanho = st.sidebar.slider("Altura das páginas", 400, 1500, 800)
     largura_mapa = st.sidebar.slider("Largura Tabela de Notas", 1, 5, 2)
     largura_grafico = st.sidebar.slider("Largura Gráfico de Notas", 1, 5, 3)
@@ -201,7 +205,7 @@ if uploaded_file is not None:
         st.markdown("---")
         st.header('Relatório por Item')
         st.sidebar.markdown("---")
-        st.sidebar.write("Configurações Relatório por Item")
+        st.sidebar.write("**Configurações Relatório por Item**")
         altura = st.sidebar.slider("Altura do Relatório por Item", 400, 1500, 800)
         coluna1 = st.sidebar.slider("Largura do Relatório por Item", 1, 10, 4)
         coluna3 = st.sidebar.slider("Largura do Mapa de Conteúdos", 1, 10, 2)

@@ -28,6 +28,9 @@ st.info(
 st.markdown("---")
 alunos = pd.read_excel('alunos.xls')
 
+with st.sidebar:
+    st.image("logo.png")
+
 
 
 col1, col2 = st.columns(2)
