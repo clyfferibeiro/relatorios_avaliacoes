@@ -34,8 +34,12 @@ if uploaded_file is not None:
 
         st.write(f'Mapa de Conteúdos Selecionado: {nome_arquivo}')
 
-        st.dataframe(
-        data,hide_index=True)
+        st.dataframe(data,hide_index=True)
+
+        st.info(
+                "Insira as notas dos alunos abaixo e salve a Tabela de Pontuação.",
+                icon="✍️",
+                )
         
 
 
