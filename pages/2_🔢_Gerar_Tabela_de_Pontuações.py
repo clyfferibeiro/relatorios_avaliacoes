@@ -28,7 +28,7 @@ css='''
 '''
 st.markdown(css, unsafe_allow_html=True)
 
-col1, col2 = st.columns([1,2])
+col1, col2 = st.columns([3,2])
 
 
 with col1:
