@@ -23,7 +23,7 @@ st.title("📋 Gerador de Mapa de Conteúdos")
 st.info(
     """
     Aplicativo para criação de Mapa de Conteúdos das avaliações.
-    """, icon='🧑‍🏫'
+    """, icon='📋'
 )
 st.markdown("---")
 alunos = pd.read_excel('alunos.xls')
