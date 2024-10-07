@@ -78,7 +78,7 @@ css='''
 st.markdown(css, unsafe_allow_html=True)
 
 
-col1_1, col1_2 = st.columns([1,2])
+col1_1, col1_2 = st.columns([3,2])
 
 with col1_1:
     st.write(
