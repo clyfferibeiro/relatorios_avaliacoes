@@ -130,9 +130,10 @@ if uploaded_file is not None:
         #notas_questoes
 
         alunos = notas["Alunos"]
-        #alunos = st.sidebar.multiselect("Selecione Alunos", notas["Alunos"], default=notas["Alunos"])
+        #alunos = st.multiselect("Selecione Alunos", notas["Alunos"], default=notas["Alunos"])
         alunos = alunos.values.tolist()
 
+        #alunos
 
         lista = []
         lista_notas = []
@@ -151,6 +152,9 @@ if uploaded_file is not None:
 
         df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença"])
         #df_media
+
+        list_nota_final = []
+        
 
         for i in alunos:
             grades = notas[notas["Alunos"]==i]
@@ -210,6 +214,8 @@ if uploaded_file is not None:
             df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
             st.markdown("---")
             st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
+            
+            list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
             with st.container(border=True, height=tamanho):
                 col1, col2 = st.columns([largura_mapa, largura_grafico], vertical_alignment="center")
                 with col1:
@@ -234,7 +240,7 @@ if uploaded_file is not None:
                     notas_questoes[columns[m+1]] = (notas_questoes[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
                     mean_list.append(round(notas_questoes[columns[m+1]].mean()))
 
-    
+        
             notas_questoes.loc[-1, :] = mean_list
             #notas_questoes
             notas_questoes = notas_questoes.style.map(color_questoes, subset=columns[1:len(columns)])
@@ -252,10 +258,42 @@ if uploaded_file is not None:
 
             with col5:
                 st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Média Turma": None, "Diferença": None}, hide_index=True, height=altura)
-            
-            
 
-            #notas_questoes.style
+
+        st.markdown("---")
+        st.header('Notas Finais dos Alunos')  
+        with st.container(border=True, height=altura):  
+            df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
+            #df_notas_finais
+            media_turma = df_notas_finais['Nota Total'].mean().round(1)
+            #media_turma
+            colors1 = np.ones(len(df_notas_finais["Nota Total"]))
+            colors1 = np.transpose(colors1)
+            index11 = df_notas_finais["Nota Total"] < media_turma
+            colors1[index11] = 0
+            df_notas_finais = df_notas_finais.assign(colors=colors1.astype('str'))
+            #df_notas_finais
+            fig1 = px.bar(df_notas_finais, x="Aluno", y="Nota Total", title=f'Nota percentual dos alunos. Média da Turma = {media_turma}%',
+                        text_auto = True,  height=altura,
+                        labels={
+                                            "media": "Média Percentual (%)",
+                                            "disciplina": "Disciplinas",
+                                            "colors": ''
+                            },
+                        color="colors",
+                                color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
+            newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
+            fig1.for_each_trace(lambda t: t.update(name = newnames[t.name],
+                                            legendgroup = newnames[t.name],
+                                            hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
+                                            )
+                        )
+            fig1.add_shape( # add a horizontal "target" line
+                 label_textposition="start", label_font_size=22, label_text=f'Média Turma = {media_turma}%', type="line", line_color="salmon", line_width=4, opacity=1, line_dash="dot",
+                 x0=0, x1=1, xref="paper", y0=media_turma, y1=media_turma, yref="y")
+            fig1
+
+            #notas_questoes.style   
     else:
           st.error("🚨 DADOS INVÁLIDOS! Verifique se o arquivo é uma Tabela de Pontuação. 🚨")
     
