@@ -213,12 +213,13 @@ if uploaded_file is not None:
             #notas_questoes
 
             #print(fig.key)
+            media_questoes_turma = df_plot['Média Turma'].mean()
             df_plot["Conteúdo"] = lista_conteudos
             df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
             list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
             if 'Individual' in relatorios_selec:
                 st.markdown("---")
-                st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%')
+                st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%. Média da Turma = {media_questoes_turma.round(0)}%.')
                 
                 
 
@@ -275,7 +276,7 @@ if uploaded_file is not None:
             with st.container(border=True, height=altura):  
                 df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
                 #df_notas_finais
-                media_turma = df_notas_finais['Nota Total'].mean().round(1)
+                media_turma = round(media_questoes_turma)
                 #media_turma
                 colors1 = np.ones(len(df_notas_finais["Nota Total"]))
                 colors1 = np.transpose(colors1)
