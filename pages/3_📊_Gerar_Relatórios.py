@@ -134,7 +134,11 @@ if uploaded_file is not None:
         alunos = alunos.values.tolist()
 
         lista_relatorios = ['Individual', 'Por Item', 'Notas Finais']
-        relatorios_selec = st.multiselect("Selecione os Relatórios Desejados:", lista_relatorios, default=lista_relatorios)
+        relatorios_selec = st.multiselect("**Selecione os Relatórios Desejados:**", lista_relatorios, default=lista_relatorios)
+
+        if not relatorios_selec:
+             st.error("👆 SELECIONE UM OU MAIS RELATÓRIOS ACIMA! 👆")
+    
 
         #alunos
 
