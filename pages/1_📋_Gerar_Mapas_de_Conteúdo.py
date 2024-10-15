@@ -41,22 +41,23 @@ with st.sidebar:
 
 
 st.header("Dados da Avaliação")
-col1, col2 = st.columns(2)
+with st.container(border=True):
+    col1, col2 = st.columns(2)
 
-with col1:
-    disciplina = st.selectbox(
-        "**Selecione a Disciplina**",
-        ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ],
-        index=None
-    )
+    with col1:
+        disciplina = st.selectbox(
+            "**Selecione a Disciplina**",
+            ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ],
+            index=None
+        )
 
-with col2:
-    turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None)
-#     "Selecione a Turma",
-#     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
-# )
-nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
-nome_avaliacao = nome_avaliacao.replace(' ', '_')
+    with col2:
+        turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None)
+    #     "Selecione a Turma",
+    #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
+    # )
+    nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
+    nome_avaliacao = nome_avaliacao.replace(' ', '_')
 # Create a random Pandas dataframe with existing tickets.
 if "df" not in st.session_state:
 
@@ -139,49 +140,50 @@ if submitted:
 
 
 st.header("Lista de Questões Adicionadas")
-col5, col6, col7 = st.columns(3)
-col5.write(f"Número de Questões: `{len(st.session_state.df)}`")
-col6.write(f"Disciplina: `{disciplina}`")
-col7.write(f"Turma: `{turma}`")
+with st.container(border=True):
+    col5, col6, col7 = st.columns(3)
+    col5.write(f"Número de Questões: `{len(st.session_state.df)}`")
+    col6.write(f"Disciplina: `{disciplina}`")
+    col7.write(f"Turma: `{turma}`")
 
 
 
 
-# Show the tickets dataframe with `st.data_editor`. This lets the user edit the table
-# cells. The edited data is returned as a new dataframe.
-st.session_state.df = st.data_editor(
-    st.session_state.df, key="changes", on_change=update,
-    #num_rows="dynamic",
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "Status": st.column_config.SelectboxColumn(
-            "Gabarito",
-            help="Ticket status",
-            options=["A","B","C", "D", "E", "Aberta"],
-            required=True,
-        ),
-        "Priority": st.column_config.SelectboxColumn(
-            "Dificuldade",
-            help="Priority",
-            options=["Fácil", "Média", "Difícil"],
-            required=True,
-        ),
-        #"Série": None,
-    },
-    # Disable editing the ID and Date Submitted columns.
-    #disabled=["ID"],
-    
-)
-#st.session_state.df = 
-edited_df = st.session_state.df
+    # Show the tickets dataframe with `st.data_editor`. This lets the user edit the table
+    # cells. The edited data is returned as a new dataframe.
+    st.session_state.df = st.data_editor(
+        st.session_state.df, key="changes", on_change=update,
+        #num_rows="dynamic",
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Status": st.column_config.SelectboxColumn(
+                "Gabarito",
+                help="Ticket status",
+                options=["A","B","C", "D", "E", "Aberta"],
+                required=True,
+            ),
+            "Priority": st.column_config.SelectboxColumn(
+                "Dificuldade",
+                help="Priority",
+                options=["Fácil", "Média", "Difícil"],
+                required=True,
+            ),
+            #"Série": None,
+        },
+        # Disable editing the ID and Date Submitted columns.
+        #disabled=["ID"],
+        
+    )
+    #st.session_state.df = 
+    edited_df = st.session_state.df
 
-st.write(f"Valor Total das Questões: `{edited_df.Valor.sum().round(2)}`")
-st.info(
-    "Você pode editar o conteúdo, o gabarito, o valor e a dificuldade das questões clicando duas vezes"
-    " na célula correspondente!",
-    icon="✍️",
-)
+    st.write(f"Valor Total das Questões: `{edited_df.Valor.sum().round(2)}`")
+    st.info(
+        "Você pode editar o conteúdo, o gabarito, o valor e a dificuldade das questões clicando duas vezes"
+        " na célula correspondente!",
+        icon="✍️",
+    )
 
 #save = st.form_submit_button("Salvar Planilha")
 
