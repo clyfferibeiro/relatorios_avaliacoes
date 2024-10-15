@@ -164,7 +164,7 @@ if uploaded_file is not None:
                     b = valor #float(valor[j].values.tolist()[0].replace(',','.'))
                     nota_perc = round(a/b*100)
                     delta =  round(nota_perc - media_questao1/b*100) 
-                    lista.append([i, j, nota_perc, round(media_questao1/b*100), delta, b ])
+                    lista.append([i, j, nota_perc, (media_questao1/b*100), delta, b ])
                     lista_notas.append([nota_perc])
 
         df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença", "Valor"])
@@ -244,6 +244,7 @@ if uploaded_file is not None:
                 #media_questoes_turma1
                 df_plot["Conteúdo"] = lista_conteudos
                 df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
+                df_plot = df_plot.format(precision=0)
                 list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
                 if 'Individual' in relatorios_selec:
                     st.markdown("---")
@@ -271,7 +272,7 @@ if uploaded_file is not None:
         if 'Por Item' in relatorios_selec:
             st.markdown("---")
             st.header('Relatório por Item')
-            notas_questoes2 = notas_questoes1
+            #notas_questoes2 = notas_questoes1
             
             with st.container(border=True, height=altura):
                 mean_list = ['Média da Questão']
@@ -286,6 +287,7 @@ if uploaded_file is not None:
                 notas_questoes1 = notas_questoes1.map(color_media, subset='Alunos')
             
                 notas_questoes1 = notas_questoes1.format(precision=0)
+                
 
                 
                 col3, col4, col5 = st.columns([coluna1, 1, coluna3])#, vertical_alignment="center")

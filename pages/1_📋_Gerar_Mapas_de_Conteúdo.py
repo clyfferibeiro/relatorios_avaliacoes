@@ -37,16 +37,17 @@ col1, col2 = st.columns(2)
 
 with col1:
     disciplina = st.selectbox(
-        "Selecione a Disciplina",
+        "**Selecione a Disciplina**",
         ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ]
     )
 
 with col2:
-    turma = st.selectbox("Turma", alunos['Série'].sort_values(ascending = True).unique())
+    turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique())
 #     "Selecione a Turma",
 #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
 # )
-
+nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
+nome_avaliacao = nome_avaliacao.replace(' ', '_')
 # Create a random Pandas dataframe with existing tickets.
 if "df" not in st.session_state:
 
@@ -180,7 +181,7 @@ with col3:
     st.download_button(
     "Salvar Mapa de Conteúdos",
     csv,
-    f'{disciplina}_{turma}_Mapa_Conteudos.csv',
+    f'{disciplina}_{turma}_{nome_avaliacao}_Mapa_Conteudos.csv',
     "text/csv",
     key='download-csv'
     )

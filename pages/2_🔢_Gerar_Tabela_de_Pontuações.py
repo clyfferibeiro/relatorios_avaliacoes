@@ -45,7 +45,7 @@ if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
     nome_arquivo = nome_arquivo.replace('_Mapa_Conteudos', '')
-    nome_arquivo = nome_arquivo.replace('_', ' - ')
+    #nome_arquivo = nome_arquivo.replace('_', ' - ')
 
     if 'ID' in data.columns:
 
@@ -147,7 +147,7 @@ if uploaded_file is not None:
         st.download_button(
         "Salvar Tabela Pontuação",
         csv,
-        f'{nome_arquivo}_{turma}_Tabela_Pontuação.csv',
+        f'{nome_arquivo}_Turma_{turma}_Tabela_Pontuação.csv',
         "text/csv",
         key='download-csv'
         )
