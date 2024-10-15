@@ -49,7 +49,7 @@ if uploaded_file is not None:
 
     if 'ID' in data.columns:
 
-        st.write(f'Mapa de Conteúdos Selecionado: {nome_arquivo_relatorio}')
+        st.write(f'**Mapa de Conteúdos Selecionado: {nome_arquivo_relatorio}**')
 
         st.dataframe(data,hide_index=True)
 
