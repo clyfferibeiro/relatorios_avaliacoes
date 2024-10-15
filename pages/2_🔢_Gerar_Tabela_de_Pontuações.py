@@ -45,11 +45,11 @@ if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
     nome_arquivo = nome_arquivo.replace('_Mapa_Conteudos', '')
-    #nome_arquivo = nome_arquivo.replace('_', ' - ')
+    nome_arquivo_relatorio = nome_arquivo.replace('_', ' - ')
 
     if 'ID' in data.columns:
 
-        st.write(f'Mapa de Conteúdos Selecionado: {nome_arquivo}')
+        st.write(f'Mapa de Conteúdos Selecionado: {nome_arquivo_relatorio}')
 
         st.dataframe(data,hide_index=True)
 
