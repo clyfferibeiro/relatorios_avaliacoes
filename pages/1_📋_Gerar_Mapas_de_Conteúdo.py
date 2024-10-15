@@ -7,6 +7,13 @@ import pandas as pd
 import streamlit as st
 
 
+@st.dialog("🚨 Erro: sem dados da avaliação!")
+def func_disciplina():
+    st.write(f"Primeiramente, preencha todos os dados da avaliação.")
+    if st.button("OK"):
+        st.rerun()
+    
+
 def update():
     for idx, change in st.session_state.changes["edited_rows"].items():
         for label, value in change.items():
@@ -33,16 +40,18 @@ with st.sidebar:
 
 
 
+st.header("Dados da Avaliação")
 col1, col2 = st.columns(2)
 
 with col1:
     disciplina = st.selectbox(
         "**Selecione a Disciplina**",
-        ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ]
+        ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ],
+        index=None
     )
 
 with col2:
-    turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique())
+    turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None)
 #     "Selecione a Turma",
 #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
 # )
@@ -95,35 +104,38 @@ with st.form("add_ticket_form", clear_on_submit=True):
     submitted = st.form_submit_button("Adicionar", on_click=clear_text)
 
 if submitted:
-    # Make a dataframe for the new ticket and append it to the dataframe in session
-    # state.
-    if len(st.session_state.df)==0:
-        recent_ticket_number = 0
-    else:  
-        recent_ticket_number = len(st.session_state.df)
-    today = datetime.datetime.now().strftime("%m-%d-%Y")
-    if recent_ticket_number < 9:
-        id = f'Q0{recent_ticket_number+1}'
+    if not (disciplina and turma and nome_avaliacao):
+        func_disciplina()
     else:
-        id = f'Q{recent_ticket_number+1}'
-    df_new = pd.DataFrame(
-        [
-            {
-                "ID": id,
-                "Conteúdo": issue,
-                "Gabarito": gabarito,
-                "Valor": valor,
-                "Dificuldade": priority,
-                "Série": turma,
-                # "Date Submitted": today,
-            }
-        ]
-    )
+        # Make a dataframe for the new ticket and append it to the dataframe in session
+        # state.
+        if len(st.session_state.df)==0:
+            recent_ticket_number = 0
+        else:  
+            recent_ticket_number = len(st.session_state.df)
+        today = datetime.datetime.now().strftime("%m-%d-%Y")
+        if recent_ticket_number < 9:
+            id = f'Q0{recent_ticket_number+1}'
+        else:
+            id = f'Q{recent_ticket_number+1}'
+        df_new = pd.DataFrame(
+            [
+                {
+                    "ID": id,
+                    "Conteúdo": issue,
+                    "Gabarito": gabarito,
+                    "Valor": valor,
+                    "Dificuldade": priority,
+                    "Série": turma,
+                    # "Date Submitted": today,
+                }
+            ]
+        )
 
-    # Show a little success message.
-    #st.write("Ticket submitted! Here are the ticket details:")
-    #st.dataframe(df_new, use_container_width=True, hide_index=True)
-    st.session_state.df = pd.concat([ st.session_state.df,df_new], axis=0, ignore_index=True)
+        # Show a little success message.
+        #st.write("Ticket submitted! Here are the ticket details:")
+        #st.dataframe(df_new, use_container_width=True, hide_index=True)
+        st.session_state.df = pd.concat([ st.session_state.df,df_new], axis=0, ignore_index=True)
 
 
 st.header("Lista de Questões Adicionadas")
