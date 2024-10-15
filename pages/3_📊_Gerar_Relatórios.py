@@ -298,10 +298,15 @@ if uploaded_file is not None:
                 with col5:
                     st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Média Turma": None, "Diferença": None, "Valor": None}, hide_index=True, height=altura)
 
+        st.sidebar.markdown("---")
+        st.sidebar.write("**Configurações Relatório Notas Finais**")
+        altura_nf = st.sidebar.slider("Altura do Relatório Notas Finais", 400, 1500, 800)
+        
+
         if 'Notas Finais' in relatorios_selec:
             st.markdown("---")
             st.header('Notas Finais dos Alunos')  
-            with st.container(border=True, height=altura):  
+            with st.container(border=True, height=altura_nf):  
                 df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
                 #df_notas_finais
                 media_turma = round(media_questoes_turma,1)
@@ -313,7 +318,7 @@ if uploaded_file is not None:
                 df_notas_finais = df_notas_finais.assign(colors=colors1.astype('str'))
                 #df_notas_finais
                 fig1 = px.bar(df_notas_finais, x="Aluno", y="Nota Total", title=f'Nota percentual dos alunos. Média da Turma = {media_turma}%',
-                            text_auto = True,  height=altura,
+                            text_auto = True,  height=altura_nf-50,
                             labels={
                                                 "media": "Média Percentual (%)",
                                                 "disciplina": "Disciplinas",
