@@ -23,6 +23,13 @@ def update():
 def clear_text():
     st.session_state.my_text = st.session_state.widget
     st.session_state.widget = ""
+    st.session_state.nome_aval = st.session_state.widget_nome_aval
+    
+def clear_dados():
+    st.session_state.nome_aval = st.session_state.widget_nome_aval
+    st.session_state.widget_nome_aval = ""
+    st.session_state.disciplina = None
+    st.session_state.turma = None
 
 # Show app title and description.
 st.set_page_config(page_title="App Geração Relatório de Avaliações", page_icon="📋")
@@ -48,15 +55,17 @@ with st.container(border=True):
         disciplina = st.selectbox(
             "**Selecione a Disciplina**",
             ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ],
-            index=None
+            index=None, key='disciplina'
         )
 
     with col2:
-        turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None)
+        turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None, key='turma')
     #     "Selecione a Turma",
     #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
     # )
-    nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
+    st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)', key='widget_nome_aval')
+    nome_avaliacao = st.session_state.get('nome_aval', '')
+    #nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
     nome_avaliacao = nome_avaliacao.replace(' ', '_')
 # Create a random Pandas dataframe with existing tickets.
 if "df" not in st.session_state:
@@ -201,7 +210,7 @@ with col3:
     )
 
 with col4:
-    if st.button("Recomeçar Construção"):
+    if st.button("Recomeçar Construção", on_click=clear_dados):
         del st.session_state.df
         #st.session_state.df = pd.DataFrame()
         st.rerun()
