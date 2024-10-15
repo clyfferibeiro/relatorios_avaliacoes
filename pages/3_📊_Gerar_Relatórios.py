@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
-st.set_page_config(layout="wide",page_title="App Geração Relatório de Avaliações", page_icon="📊")
+st.set_page_config(layout="wide",page_title="Relatórios de Avaliações", page_icon="📊")
 st.markdown(
     """
     <style type="text/css" media="print">
@@ -105,6 +105,8 @@ if uploaded_file is not None:
         
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
+    nome_relatorio = nome_arquivo.replace('_Tabela_Pontuação', '')
+    nome_relatorio = nome_relatorio.replace('_', ' - ')
 
 
     notas = data 
@@ -249,7 +251,7 @@ if uploaded_file is not None:
                 if 'Individual' in relatorios_selec:
                     st.markdown("---")
                     st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%. Média da Turma = {media_questoes_turma.round(1)}%.')
-                    
+                    st.write(f'**Avaliação: {nome_relatorio}**')
                     
 
                 
@@ -271,7 +273,8 @@ if uploaded_file is not None:
 
         if 'Por Item' in relatorios_selec:
             st.markdown("---")
-            st.header('Relatório por Item')
+            st.header(f'Relatório por Item')
+            st.write(f'**Avaliação: {nome_relatorio}**')
             #notas_questoes2 = notas_questoes1
             
             with st.container(border=True, height=altura):
@@ -307,7 +310,8 @@ if uploaded_file is not None:
 
         if 'Notas Finais' in relatorios_selec:
             st.markdown("---")
-            st.header('Notas Finais dos Alunos')  
+            st.header(f'Notas Finais dos Alunos')
+            st.write(f'**Avaliação: {nome_relatorio}**')
             with st.container(border=True, height=altura_nf):  
                 df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
                 #df_notas_finais
