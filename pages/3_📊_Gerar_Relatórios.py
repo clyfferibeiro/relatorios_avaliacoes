@@ -46,6 +46,9 @@ def color_questoes(val):
             elif val > 90:
                   color = 'green'
                   color_texto = 'white'
+            elif not val:
+                 color = 'white'
+                 color_texto = 'white'
             return f'background-color: {color}; color: {color_texto}'
 
 def color_media(val):
@@ -90,6 +93,8 @@ with col1_1:
     uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
     #st.markdown(css, unsafe_allow_html=True)
 
+kk = 0
+
 if uploaded_file is not None:
     st.sidebar.markdown("---")
     st.sidebar.write("**Configurações Relatórios dos Alunos**")
@@ -125,12 +130,13 @@ if uploaded_file is not None:
         notas = notas.drop(0)
         columns = notas.columns.values.tolist()
         notas_questoes = notas
+        #notas_questoes
 
 
         #notas_questoes
 
         alunos = notas["Alunos"]
-        #alunos = st.multiselect("Selecione Alunos", notas["Alunos"], default=notas["Alunos"])
+        alunos_select = st.multiselect("**Selecione os Alunos que Fizeram a Avaliação:**", notas["Alunos"], default=notas["Alunos"])
         alunos = alunos.values.tolist()
 
         lista_relatorios = ['Individual', 'Por Item', 'Notas Finais']
@@ -141,101 +147,119 @@ if uploaded_file is not None:
     
 
         #alunos
-
+        notas_questoes1 = notas_questoes.loc[notas_questoes['Alunos'].isin(alunos_select)]
+        #linhas_selecionadas = df.loc[df['Nome'] == 'Alice']
+        #linhas_selecionadas = df.loc[df['Nome'].isin(['Alice', 'Bob'])]
+        #notas_questoes1
         lista = []
         lista_notas = []
         for i in alunos:
-            grades = notas[notas["Alunos"]==i]
-            for j in columns[1:len(columns)]:
-                valor = grades_valor[j][0]
-                media_questao = notas_questoes[j]
-                media_questao1 = media_questao.mean()
-                a = float(grades[j].values.tolist()[0])
-                b = valor #float(valor[j].values.tolist()[0].replace(',','.'))
-                nota_perc = round(a/b*100)
-                delta =  round(nota_perc - media_questao1/b*100) 
-                lista.append([i, j, nota_perc, round(media_questao1/b*100), delta ])
-                lista_notas.append([nota_perc])
+            if i in alunos_select:
+                grades = notas[notas["Alunos"]==i]
+                for j in columns[1:len(columns)]:
+                    valor = grades_valor[j][0]
+                    media_questao = notas_questoes1[j]
+                    media_questao1 = media_questao.mean()
+                    a = float(grades[j].values.tolist()[0])
+                    b = valor #float(valor[j].values.tolist()[0].replace(',','.'))
+                    nota_perc = round(a/b*100)
+                    delta =  round(nota_perc - media_questao1/b*100) 
+                    lista.append([i, j, nota_perc, round(media_questao1/b*100), delta, b ])
+                    lista_notas.append([nota_perc])
 
-        df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença"])
+        df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença", "Valor"])
         #df_media
 
         list_nota_final = []
         
 
         for i in alunos:
-            grades = notas[notas["Alunos"]==i]
-            grades_wa = grades.drop('Alunos', axis=1)
-            nota_total = grades_wa.sum(axis=1)
-            df_plot = df_media[df_media["Aluno"]==i]
-            colors = np.ones(len(df_plot["Nota"]))
-            colors = np.transpose(colors)
-            index1 = df_plot["Nota"] < df_plot["Média Turma"].values
-            colors[index1] = 0
-            df_plot = df_plot.assign(colors=colors.astype('str'))
-            
-            
-            fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', 
-                                text_auto = True, width=800, height=800,
-                                labels={
-                                            "media": "Média Percentual (%)",
-                                            "disciplina": "Disciplinas",
-                                            "colors": ''
-                            },
-                            color="colors",
-                            color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
-            newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
-
-            # fig.add_trace(df_plot, x="Diferença", y='Questão',
-            #         marker_color='crimson')
-            #eixo_x = df_plot["Diferença"].to_list()
-            #eixo_y = df_plot["Questão"].to_list()
-            #eixo_x
-            #eixo_y
-            
-            #fig.add_trace(go.Bar( x = eixo_x, y = eixo_y, showlegend=False ))
-
-                
-            fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
-                                        legendgroup = newnames[t.name],
-                                        hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
-                                        )
-                    )
-            fig.update_layout(barmode='stack', yaxis={'categoryorder':'category descending'}, xaxis_range=[0,100])
-            fig.update_xaxes(showgrid=False)
-            fig.update_yaxes(showgrid=True)
-
-            #notas_questoes
-            #df_plot
-            #columns
-            #grades_wa
-            
-            
-            
-            #notas_questoes
-            
-            #notas_questoes
-
-            #print(fig.key)
-            media_questoes_turma = df_plot['Média Turma'].mean()
-            df_plot["Conteúdo"] = lista_conteudos
-            df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
-            list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
-            if 'Individual' in relatorios_selec:
-                st.markdown("---")
-                st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%. Média da Turma = {media_questoes_turma.round(0)}%.')
+            if i in alunos_select:
+                grades = notas[notas["Alunos"]==i]
+                grades_wa = grades.drop('Alunos', axis=1)
+                nota_total = grades_wa.sum(axis=1)
+                df_plot = df_media[df_media["Aluno"]==i]
+                colors = np.ones(len(df_plot["Nota"]))
+                colors = np.transpose(colors)
+                index1 = df_plot["Nota"] < df_plot["Média Turma"].values
+                colors[index1] = 0
+                df_plot = df_plot.assign(colors=colors.astype('str'))
                 
                 
+                fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', 
+                                    text_auto = True, width=800, height=800,
+                                    labels={
+                                                "media": "Média Percentual (%)",
+                                                "disciplina": "Disciplinas",
+                                                "colors": ''
+                                },
+                                color="colors",
+                                color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
+                newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
 
-            
-                with st.container(border=True, height=tamanho):
-                    col1, col2 = st.columns([largura_mapa, largura_grafico], vertical_alignment="center")
-                    with col1:
-                        st.dataframe(df_plot, column_config={"colors": None, "Aluno": None}, hide_index=True, height=tamanho )
+                # fig.add_trace(df_plot, x="Diferença", y='Questão',
+                #         marker_color='crimson')
+                #eixo_x = df_plot["Diferença"].to_list()
+                #eixo_y = df_plot["Questão"].to_list()
+                #eixo_x
+                #eixo_y
+                
+                #fig.add_trace(go.Bar( x = eixo_x, y = eixo_y, showlegend=False ))
 
-                    with col2:
-                        fig
-            
+                    
+                fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
+                                            legendgroup = newnames[t.name],
+                                            hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
+                                            )
+                        )
+                fig.update_layout(barmode='stack', yaxis={'categoryorder':'category descending'}, xaxis_range=[0,100])
+                fig.update_xaxes(showgrid=False)
+                fig.update_yaxes(showgrid=True)
+
+                #notas_questoes
+                #df_plot
+                #columns
+                #grades_wa
+                
+                
+                
+                #notas_questoes
+                
+                #notas_questoes
+                if kk == 0:
+                    rasc1 = 0
+                    for k in range(len(df_plot)):
+                        rasc1 = df_plot['Média Turma'][k] * df_plot['Valor'][k] + rasc1
+                        #rasc1
+                    #rasc1
+                    media_questoes_turma = rasc1 / df_plot["Valor"].sum()
+                    kk = 1
+                     
+
+                #print(fig.key)
+                #df_plot
+                #media_questoes_turma = df_plot['Média Turma'].mean()
+                #df_plot
+                #media_questoes_turma
+                #media_questoes_turma1
+                df_plot["Conteúdo"] = lista_conteudos
+                df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
+                list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
+                if 'Individual' in relatorios_selec:
+                    st.markdown("---")
+                    st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%. Média da Turma = {media_questoes_turma.round(1)}%.')
+                    
+                    
+
+                
+                    with st.container(border=True, height=tamanho):
+                        col1, col2 = st.columns([largura_mapa, largura_grafico], vertical_alignment="center")
+                        with col1:
+                            st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Valor": None}, hide_index=True, height=tamanho )
+
+                        with col2:
+                            fig
+                
 
         #grades_valor
         st.sidebar.markdown("---")
@@ -247,32 +271,32 @@ if uploaded_file is not None:
         if 'Por Item' in relatorios_selec:
             st.markdown("---")
             st.header('Relatório por Item')
-            
+            notas_questoes2 = notas_questoes1
             
             with st.container(border=True, height=altura):
                 mean_list = ['Média da Questão']
                 for m in range(len(columns)-1):
-                        notas_questoes[columns[m+1]] = (notas_questoes[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
-                        mean_list.append(round(notas_questoes[columns[m+1]].mean()))
+                        notas_questoes1[columns[m+1]] = (notas_questoes1[columns[m+1]] / grades_valor[columns[m+1]][0] * 100)
+                        mean_list.append(round(notas_questoes1[columns[m+1]].mean()))
 
             
-                notas_questoes.loc[-1, :] = mean_list
-                #notas_questoes
-                notas_questoes = notas_questoes.style.map(color_questoes, subset=columns[1:len(columns)])
-                notas_questoes = notas_questoes.map(color_media, subset='Alunos')
+                notas_questoes1.loc[-1, :] = mean_list
+                #notas_questoes2
+                notas_questoes1 = notas_questoes1.style.map(color_questoes, subset=columns[1:len(columns)])
+                notas_questoes1 = notas_questoes1.map(color_media, subset='Alunos')
             
-                notas_questoes = notas_questoes.format(precision=0)
+                notas_questoes1 = notas_questoes1.format(precision=0)
 
                 
                 col3, col4, col5 = st.columns([coluna1, 1, coluna3])#, vertical_alignment="center")
                 with col3:
-                    st.dataframe(notas_questoes, hide_index=True, height=altura )
+                    st.dataframe(notas_questoes1, hide_index=True, height=altura )
 
                 with col4:
                     st.image("legenda.png")
 
                 with col5:
-                    st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Média Turma": None, "Diferença": None}, hide_index=True, height=altura)
+                    st.dataframe(df_plot, column_config={"colors": None, "Aluno": None, "Nota": None, "Média Turma": None, "Diferença": None, "Valor": None}, hide_index=True, height=altura)
 
         if 'Notas Finais' in relatorios_selec:
             st.markdown("---")
@@ -280,7 +304,7 @@ if uploaded_file is not None:
             with st.container(border=True, height=altura):  
                 df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
                 #df_notas_finais
-                media_turma = round(media_questoes_turma)
+                media_turma = round(media_questoes_turma,1)
                 #media_turma
                 colors1 = np.ones(len(df_notas_finais["Nota Total"]))
                 colors1 = np.transpose(colors1)
