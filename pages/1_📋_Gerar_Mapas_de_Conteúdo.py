@@ -53,20 +53,21 @@ with st.container(border=True):
 
     with col1:
         disciplina = st.selectbox(
-            "**Selecione a Disciplina**",
+            "**Selecione a Disciplina** :red[*]",
             ["Matemática", "Português", "Ciências", "Geografia", "História", "Inglês", "Espanhol", "Produção Textual", "Literatura", "Física", "Química", "Biologia" ],
             index=None, key='disciplina'
         )
 
     with col2:
-        turma = st.selectbox("**Selecione a Turma**", alunos['Série'].sort_values(ascending = True).unique(), index=None, key='turma')
+        turma = st.selectbox("**Selecione a Turma** :red[*]", alunos['Série'].sort_values(ascending = True).unique(), index=None, key='turma')
     #     "Selecione a Turma",
     #     ["6º Ano", "7º Ano", "8º Ano", "9º Ano", "1ª Série", "2ª Série", "3ª Série"]
     # )
-    st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)', key='widget_nome_aval')
+    st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...) :red[*]', key='widget_nome_aval')
     nome_avaliacao = st.session_state.get('nome_aval', '')
     #nome_avaliacao = st.text_input('**Digite o "Nome" da Avaliação** (Teste Mensal, Prova Trimestral, etc...)')
     nome_avaliacao = nome_avaliacao.replace(' ', '_')
+    st.write(':red[*]  Campos Obrigatórios')
 # Create a random Pandas dataframe with existing tickets.
 if "df" not in st.session_state:
 
