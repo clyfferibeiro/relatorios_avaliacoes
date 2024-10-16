@@ -4,7 +4,7 @@ import streamlit as st
 def update():
     for idx, change in st.session_state.changes["edited_rows"].items():
         for label, value in change.items():
-            st.session_state.df.loc[idx, label] = value
+            st.session_state.tn.loc[idx, label] = value
 
 st.set_page_config(layout="wide",page_title="App Geração Relatório de Avaliações", page_icon="🔢")
 
@@ -51,7 +51,7 @@ if uploaded_file is not None:
     nome_arquivo = uploaded_file.name.replace('.csv', '')
     #nome_arquivo = nome_arquivo.replace('_Mapa_Conteudos', '')
     nome_arquivo_relatorio = nome_arquivo.replace('_', ' - ')
-    st.session_state.df = data
+    st.session_state.tn = data
     if 'Alunos' in data.columns:
 
         st.write(f'**Tabela de Pontuação Selecionada: {nome_arquivo_relatorio}**')
@@ -73,8 +73,8 @@ if uploaded_file is not None:
 
         columns = data.columns.values.tolist()
         colunas_visiveis = columns[0:(len(columns))]
-        st.session_state.df = st.data_editor(
-        st.session_state.df, key="changes", on_change=update,
+        st.session_state.tn = st.data_editor(
+        st.session_state.tn, key="changes", on_change=update,
         #num_rows="dynamic",
         use_container_width=True,
         hide_index=True,
@@ -82,7 +82,7 @@ if uploaded_file is not None:
                
         )
 
-        csv = st.session_state.df.to_csv(index=False).encode('utf-8')
+        csv = st.session_state.tn.to_csv(index=False).encode('utf-8')
         st.download_button(
         "Salvar Tabela Pontuação",
         csv,
