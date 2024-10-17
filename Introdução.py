@@ -26,9 +26,9 @@ with st.container():
     st.info('**2.** Gere e Salve a Tabela de Pontuações (com base no Mapa de Conteúdos salvo no item 1) utilizando a aba ["Gerar Tabela de Pontuações"](https://relatoriosavaliacoes-6rrmrmsjn4dtuxbkt9qk8x.streamlit.app/Gerar_Tabela_de_Pontua%C3%A7%C3%B5es);')
     st.info('**3.** Gere os relatórios (à partir da Tabela de Pontuações salva anteriormente) utilizando a aba ["Gerar Relatórios"](https://relatoriosavaliacoes-6rrmrmsjn4dtuxbkt9qk8x.streamlit.app/Gerar_Relat%C3%B3rios);')
 
-with st.container():
-    st.markdown('---')
-    st.title('Tutorial:')
+# with st.container():
+    # st.markdown('---')
+    st.title('Vídeo Tutorial:')
     # video_file = open("tutorial.mp4", "rb")
     # video_bytes = video_file.read()
 
