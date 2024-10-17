@@ -64,7 +64,6 @@ st.info(
     """, icon='📈'
 )
 
-#st.markdown("---")
 with st.sidebar:
     st.image("logo.png")
 
@@ -91,7 +90,6 @@ with col1_1:
     )
 
     uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
-    #st.markdown(css, unsafe_allow_html=True)
 
 kk = 0
 
@@ -122,21 +120,12 @@ if uploaded_file is not None:
                 lista_conteudos.append(notas[s][0])
                 notas = notas.drop(s, axis=1)
                 
-            
         grades_valor = notas[notas["Alunos"]=="Valor"]
-        
         grades_valor = grades_valor.drop('Alunos', axis=1)
         valor_total = grades_valor.sum(axis=1)
-
-        
         notas = notas.drop(0)
         columns = notas.columns.values.tolist()
         notas_questoes = notas
-        #notas_questoes
-
-
-        #notas_questoes
-
         alunos = notas["Alunos"]
         alunos_select = st.multiselect("**Selecione os Alunos que Fizeram a Avaliação:**", notas["Alunos"], default=notas["Alunos"])
         alunos = alunos.values.tolist()
@@ -147,12 +136,7 @@ if uploaded_file is not None:
         if not relatorios_selec:
              st.error("👆 SELECIONE UM OU MAIS RELATÓRIOS ACIMA! 👆")
     
-
-        #alunos
         notas_questoes1 = notas_questoes.loc[notas_questoes['Alunos'].isin(alunos_select)]
-        #linhas_selecionadas = df.loc[df['Nome'] == 'Alice']
-        #linhas_selecionadas = df.loc[df['Nome'].isin(['Alice', 'Bob'])]
-        #notas_questoes1
         lista = []
         lista_notas = []
         for i in alunos:
@@ -163,17 +147,14 @@ if uploaded_file is not None:
                     media_questao = notas_questoes1[j]
                     media_questao1 = media_questao.mean()
                     a = float(grades[j].values.tolist()[0])
-                    b = valor #float(valor[j].values.tolist()[0].replace(',','.'))
+                    b = valor 
                     nota_perc = round(a/b*100)
                     delta =  round(nota_perc - media_questao1/b*100) 
                     lista.append([i, j, nota_perc, (media_questao1/b*100), delta, b ])
                     lista_notas.append([nota_perc])
 
         df_media = pd.DataFrame(lista, columns=['Aluno', 'Questão', "Nota", "Média Turma", "Diferença", "Valor"])
-        #df_media
-
-        list_nota_final = []
-        
+        list_nota_final = []   
 
         for i in alunos:
             if i in alunos_select:
@@ -186,8 +167,6 @@ if uploaded_file is not None:
                 index1 = df_plot["Nota"] < df_plot["Média Turma"].values
                 colors[index1] = 0
                 df_plot = df_plot.assign(colors=colors.astype('str'))
-                
-                
                 fig = px.bar(df_plot, x="Nota", y="Questão", orientation='h', 
                                     text_auto = True, width=800, height=800,
                                     labels={
@@ -199,16 +178,6 @@ if uploaded_file is not None:
                                 color_discrete_map={ '1.0': 'blue', '0.0': 'red'}).update_xaxes(categoryorder="total ascending")
                 newnames = {'0.0':'Abaixo da Média da Turma', '1.0': 'Acima da Média da Turma'}
 
-                # fig.add_trace(df_plot, x="Diferença", y='Questão',
-                #         marker_color='crimson')
-                #eixo_x = df_plot["Diferença"].to_list()
-                #eixo_y = df_plot["Questão"].to_list()
-                #eixo_x
-                #eixo_y
-                
-                #fig.add_trace(go.Bar( x = eixo_x, y = eixo_y, showlegend=False ))
-
-                    
                 fig.for_each_trace(lambda t: t.update(name = newnames[t.name],
                                             legendgroup = newnames[t.name],
                                             hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
@@ -218,43 +187,24 @@ if uploaded_file is not None:
                 fig.update_xaxes(showgrid=False)
                 fig.update_yaxes(showgrid=True)
 
-                #notas_questoes
-                #df_plot
-                #columns
-                #grades_wa
-                
-                
-                
-                #notas_questoes
-                
-                #notas_questoes
                 if kk == 0:
                     rasc1 = 0
                     for k in range(len(df_plot)):
                         rasc1 = df_plot['Média Turma'][k] * df_plot['Valor'][k] + rasc1
-                        #rasc1
-                    #rasc1
+
                     media_questoes_turma = rasc1 / df_plot["Valor"].sum()
                     kk = 1
-                     
 
-                #print(fig.key)
-                #df_plot
-                #media_questoes_turma = df_plot['Média Turma'].mean()
-                #df_plot
-                #media_questoes_turma
-                #media_questoes_turma1
                 df_plot["Conteúdo"] = lista_conteudos
                 df_plot = df_plot.style.map(color_survived, subset=['Diferença'])
                 df_plot = df_plot.format(precision=0)
                 list_nota_final.append([i, (nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)])
+
                 if 'Individual' in relatorios_selec:
                     st.markdown("---")
                     st.header(f' Notas de {i}. Pontuação: {nota_total[alunos.index(i)+1].round(2)}/{valor_total[0].round(1)} ou {(nota_total[alunos.index(i)+1] / valor_total[0].round(1) *100).round(1)}%. Média da Turma = {media_questoes_turma.round(1)}%.')
                     st.write(f'**Avaliação: {nome_relatorio}**')
-                    
-
-                
+                                    
                     with st.container(border=True, height=tamanho):
                         col1, col2 = st.columns([largura_mapa, largura_grafico], vertical_alignment="center")
                         with col1:
@@ -264,7 +214,6 @@ if uploaded_file is not None:
                             fig
                 
 
-        #grades_valor
         st.sidebar.markdown("---")
         st.sidebar.write("**Configurações Relatório por Item**")
         altura = st.sidebar.slider("Altura do Relatório por Item", 400, 1500, 800)
@@ -275,8 +224,7 @@ if uploaded_file is not None:
             st.markdown("---")
             st.header(f'Relatório por Item')
             st.write(f'**Avaliação: {nome_relatorio}**')
-            #notas_questoes2 = notas_questoes1
-            
+
             with st.container(border=True, height=altura):
                 mean_list = ['Média da Questão']
                 for m in range(len(columns)-1):
@@ -285,14 +233,9 @@ if uploaded_file is not None:
 
             
                 notas_questoes1.loc[-1, :] = mean_list
-                #notas_questoes2
                 notas_questoes1 = notas_questoes1.style.map(color_questoes, subset=columns[1:len(columns)])
                 notas_questoes1 = notas_questoes1.map(color_media, subset='Alunos')
-            
                 notas_questoes1 = notas_questoes1.format(precision=0)
-                
-
-                
                 col3, col4, col5 = st.columns([coluna1, 1, coluna3])#, vertical_alignment="center")
                 with col3:
                     st.dataframe(notas_questoes1, hide_index=True, height=altura )
@@ -314,15 +257,12 @@ if uploaded_file is not None:
             st.write(f'**Avaliação: {nome_relatorio}**')
             with st.container(border=True, height=altura_nf):  
                 df_notas_finais = pd.DataFrame(list_nota_final, columns=['Aluno', "Nota Total"])    
-                #df_notas_finais
                 media_turma = round(media_questoes_turma,1)
-                #media_turma
                 colors1 = np.ones(len(df_notas_finais["Nota Total"]))
                 colors1 = np.transpose(colors1)
                 index11 = df_notas_finais["Nota Total"] < media_turma
                 colors1[index11] = 0
                 df_notas_finais = df_notas_finais.assign(colors=colors1.astype('str'))
-                #df_notas_finais
                 fig1 = px.bar(df_notas_finais, x="Aluno", y="Nota Total", title=f'Nota percentual dos alunos. Média da Turma = {media_turma}%',
                             text_auto = True,  height=altura_nf-50,
                             labels={
@@ -343,7 +283,6 @@ if uploaded_file is not None:
                     x0=0, x1=1, xref="paper", y0=media_turma, y1=media_turma, yref="y")
                 fig1
 
-            #notas_questoes.style   
     else:
           st.error("🚨 DADOS INVÁLIDOS! Verifique se o arquivo é uma Tabela de Pontuação. 🚨")
     

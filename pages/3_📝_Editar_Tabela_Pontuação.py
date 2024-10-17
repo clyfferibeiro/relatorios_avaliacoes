@@ -20,7 +20,6 @@ with st.sidebar:
     st.image("logo.png")
 
 
-
 css='''
 <style>
 [data-testid="stFileUploaderDropzone"] div div::before {color:black; content:"Arraste e Solte o arquivo aqui"}
@@ -42,27 +41,19 @@ with col1:
         👇 Selecione abaixo o arquivo da Tabela de Pontuação da Avaliação.
         """
     )
-
     uploaded_file = st.file_uploader("**Faça o upload do Arquivo Desejado**", type='csv')
-i = 0
-l = 0
+
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     nome_arquivo = uploaded_file.name.replace('.csv', '')
-    #nome_arquivo = nome_arquivo.replace('_Mapa_Conteudos', '')
     nome_arquivo_relatorio = nome_arquivo.replace('_', ' - ')
     st.session_state.tn = data
     if 'Alunos' in data.columns:
-
         st.write(f'**Tabela de Pontuação Selecionada: {nome_arquivo_relatorio}**')
-
-        #st.dataframe(data,hide_index=True)
-
         st.info(
                 "Edite as notas dos alunos abaixo e salve a Tabela de Pontuação.",
                 icon="✍️",
-                )
-        
+                )        
         columns = data.columns.values.tolist()
         busca = 'Conteudo'
         lista_conteudos = []
@@ -74,13 +65,11 @@ if uploaded_file is not None:
         columns = data.columns.values.tolist()
         colunas_visiveis = columns[0:(len(columns))]
         st.session_state.tn = st.data_editor(
-        st.session_state.tn, key="changes", on_change=update,
-        #num_rows="dynamic",
-        use_container_width=True,
-        hide_index=True,
-        column_order=colunas_visiveis
-               
-        )
+                                st.session_state.tn, key="changes", on_change=update,
+                                use_container_width=True,
+                                hide_index=True,
+                                column_order=colunas_visiveis
+                            )
 
         csv = st.session_state.tn.to_csv(index=False).encode('utf-8')
         st.download_button(
