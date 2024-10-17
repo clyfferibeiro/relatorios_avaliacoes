@@ -29,7 +29,8 @@ with st.container():
 with st.container():
     st.markdown('---')
     st.title('Tutorial:')
-    video_file = open("tutorial.mp4", "rb")
-    video_bytes = video_file.read()
+    # video_file = open("tutorial.mp4", "rb")
+    # video_bytes = video_file.read()
 
-    st.video(video_bytes)
+    # st.video(video_bytes)
+    st.video("https://youtu.be/eKFrKLUuDFQ")
